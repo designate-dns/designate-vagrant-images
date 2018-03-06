@@ -1,0 +1,31 @@
+{
+    "variables": {
+        "cloud_token": "{{ env `VAGRANT_CLOUD_TOKEN` }}",
+        "version": "0.0.{{timestamp}}"
+    },
+    "builders": [
+        {
+            "type": "lxc",
+            "name": "lxc-xenial",
+            "config_file": "conf/lxc/ubuntu.conf",
+            "template_name": "ubuntu",
+            "template_environment_vars": [
+                "SUITE=xenial"
+            ]
+        }
+    ],
+    "post-processors": [
+        [
+            {
+                "type": "vagrant",
+                "output": "output/xenial64.box"
+            },
+            {
+                "type": "vagrant-cloud",
+                "box_tag": "grahamhayes/xenial64",
+                "access_token": "{{user `cloud_token`}}",
+                "version": "{{user `version`}}"
+            }
+        ]
+    ]
+}

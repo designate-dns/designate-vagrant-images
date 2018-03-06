@@ -1,0 +1,7 @@
+packer
+packer.zip
+packer_cache
+*.box
+output-*
+files.tar.gz
+.vagrant
