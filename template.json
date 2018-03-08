@@ -12,13 +12,135 @@
             "template_environment_vars": [
                 "SUITE=xenial"
             ]
+        },
+        {
+            "type": "qemu",
+            "name": "qemu-xenial",
+            "iso_url": "http://releases.ubuntu.com/16.04/ubuntu-16.04.4-server-amd64.iso",
+            "iso_checksum": "ee834fbeb94cc55972b38caafa2029c29625e2e8",
+            "iso_checksum_type": "sha1",
+            "output_directory": "output/xenial_64_qemu",
+            "shutdown_command": "shutdown -P now",
+            "disk_size": 65536,
+            "format": "qcow2",
+            "headless": false,
+            "accelerator": "kvm",
+            "http_directory": "http",
+            "http_port_min": 10082,
+            "http_port_max": 10089,
+            "ssh_host_port_min": 2222,
+            "ssh_host_port_max": 2229,
+            "ssh_username": "root",
+            "ssh_password": "vagrant",
+            "ssh_port": 22,
+            "ssh_timeout": "10m",
+            "vm_name": "ubuntu1604",
+            "boot_wait": "5s",
+            "boot_command": [
+                "<enter><wait><f6><esc><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+                "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+                "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+                "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+                "/install/vmlinuz<wait>",
+                " auto<wait>",
+                " console-setup/ask_detect=false<wait>",
+                " console-setup/layoutcode=us<wait>",
+                " console-setup/modelcode=pc105<wait>",
+                " debconf/frontend=noninteractive<wait>",
+                " debian-installer=en_US<wait>",
+                " fb=false<wait>",
+                " initrd=/install/initrd.gz<wait>",
+                " kbd-chooser/method=us<wait>",
+                " keyboard-configuration/layout=USA<wait>",
+                " keyboard-configuration/variant=USA<wait>",
+                " locale=en_US<wait>",
+                " netcfg/get_domain=vm<wait>",
+                " netcfg/get_hostname=vagrant<wait>",
+                " grub-installer/bootdev=/dev/vda<wait>",
+                " noapic<wait>",
+                " preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/preseed.cfg",
+                " -- <wait>",
+                "<enter><wait>"
+            ]
+        },
+        {
+            "type": "virtualbox-iso",
+            "name": "vbox-xenial",
+            "iso_url": "http://releases.ubuntu.com/16.04/ubuntu-16.04.4-server-amd64.iso",
+            "iso_checksum": "ee834fbeb94cc55972b38caafa2029c29625e2e8",
+            "iso_checksum_type": "sha1",
+            "output_directory": "output/xenial_64_vbox",
+            "shutdown_command": "shutdown -P now",
+            "disk_size": 65536,
+            "headless": false,
+            "http_directory": "http",
+            "http_port_min": 10082,
+            "http_port_max": 10089,
+            "ssh_host_port_min": 2222,
+            "ssh_host_port_max": 2229,
+            "ssh_username": "root",
+            "ssh_password": "vagrant",
+            "ssh_port": 22,
+            "ssh_timeout": "10m",
+            "vm_name": "ubuntu1604",
+            "boot_wait": "5s",
+            "boot_command": [
+                "<enter><wait><f6><esc><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+                "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+                "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+                "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+                "/install/vmlinuz<wait>",
+                " auto<wait>",
+                " console-setup/ask_detect=false<wait>",
+                " console-setup/layoutcode=us<wait>",
+                " console-setup/modelcode=pc105<wait>",
+                " debconf/frontend=noninteractive<wait>",
+                " debian-installer=en_US<wait>",
+                " fb=false<wait>",
+                " initrd=/install/initrd.gz<wait>",
+                " kbd-chooser/method=us<wait>",
+                " keyboard-configuration/layout=USA<wait>",
+                " keyboard-configuration/variant=USA<wait>",
+                " locale=en_US<wait>",
+                " netcfg/get_domain=vm<wait>",
+                " netcfg/get_hostname=vagrant<wait>",
+                " grub-installer/bootdev=/dev/vda<wait>",
+                " noapic<wait>",
+                " preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/preseed.cfg",
+                " -- <wait>",
+                "<enter><wait>"
+            ]
         }
     ],
     "post-processors": [
         [
             {
                 "type": "vagrant",
-                "output": "output/xenial64.box"
+                "output": "output/xenial_64_lxc/xenial64.box"
+            },
+            {
+                "type": "vagrant-cloud",
+                "box_tag": "grahamhayes/xenial64",
+                "access_token": "{{user `cloud_token`}}",
+                "version": "{{user `version`}}"
+            }
+        ],
+        [
+            {
+                "type": "vagrant",
+                "output": "output/xenial64-libvirt.box"
+            },
+            {
+                "type": "vagrant-cloud",
+                "box_tag": "grahamhayes/xenial64",
+                "access_token": "{{user `cloud_token`}}",
+                "version": "{{user `version`}}"
+            }
+        ],
+        [
+            {
+                "type": "vagrant",
+                "output": "output/xenial64-vbox.box"
             },
             {
                 "type": "vagrant-cloud",
