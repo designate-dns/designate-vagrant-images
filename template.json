@@ -1,7 +1,7 @@
 {
     "variables": {
         "cloud_token": "{{ env `VAGRANT_CLOUD_TOKEN` }}",
-        "version": "0.0.{{timestamp}}"
+        "version": ""
     },
     "builders": [
         {
@@ -112,42 +112,46 @@
             ]
         }
     ],
+    "provisioners": [
+        {
+            "type": "shell",
+            "execute_command": "echo 'vagrant' | sudo -S -E sh '{{.Path}}'",
+            "scripts": [
+                "scripts/base.sh"
+            ]
+        },
+        {
+            "type": "shell",
+            "execute_command": "echo 'vagrant' | sudo -S -E sh '{{.Path}}'",
+            "scripts": [
+                "scripts/network.sh"
+            ],
+            "only": ["qemu-xenial"]
+        }
+    ],
     "post-processors": [
         [
             {
                 "type": "vagrant",
-                "output": "output/xenial_64_lxc/xenial64.box"
-            },
+                "output": "output/xenial64-lxc.box",
+                "only": ["lxc-xenial"]
+            }
+
+        ],
+        [
             {
-                "type": "vagrant-cloud",
-                "box_tag": "grahamhayes/xenial64",
-                "access_token": "{{user `cloud_token`}}",
-                "version": "{{user `version`}}"
+                "type": "vagrant",
+                "output": "output/xenial64-libvirt.box",
+                "only": ["qemu-xenial"]
             }
         ],
         [
             {
                 "type": "vagrant",
-                "output": "output/xenial64-libvirt.box"
-            },
-            {
-                "type": "vagrant-cloud",
-                "box_tag": "grahamhayes/xenial64",
-                "access_token": "{{user `cloud_token`}}",
-                "version": "{{user `version`}}"
+                "output": "output/xenial64-vbox.box",
+                "only": ["vbox-xenial"]
             }
-        ],
-        [
-            {
-                "type": "vagrant",
-                "output": "output/xenial64-vbox.box"
-            },
-            {
-                "type": "vagrant-cloud",
-                "box_tag": "grahamhayes/xenial64",
-                "access_token": "{{user `cloud_token`}}",
-                "version": "{{user `version`}}"
-            }
+
         ]
     ]
 }
