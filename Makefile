@@ -1,20 +1,4 @@
-# VERSION = $(git describe --tags --long)
-
-# all: packer
-
-# build:
-# 	packer build template.json
-
-# qemu:
-# 	packer build -var=version=${VERSION} -only=qemu-xenial -on-error=ask  template.json
-
-# vbox:
-# 	packer build -var=version=${VERSION} -only=vbox-xenial -on-error=ask  template.json
-
-# debug: packer
-# 	packer build -debug template.json
-
-# .PHONY: all
+.PHONY: all
 
 VERSION = $(shell git describe --tags --long)
 BUILD_FLAGS =
@@ -34,6 +18,12 @@ lxc: BUILD_FLAGS = "-only=lxc-xenial"
 lxc: TEMPLATE = "template.json"
 lxc:
 	packer build -var 'version=$(VERSION)' $(BUILD_FLAGS) $(TEMPLATE)
+
+lxc-debug: BUILD_FLAGS = -only=lxc-xenial -on-error=ask
+lxc-debug: TEMPLATE = "template.json"
+lxc-debug:
+	packer build $(BUILD_FLAGS) -var 'version=$(VERSION)' $(TEMPLATE)
+
 
 clean:
 	rm\

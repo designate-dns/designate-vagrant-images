@@ -124,10 +124,35 @@
             "type": "shell",
             "execute_command": "echo 'vagrant' | sudo -S -E sh '{{.Path}}'",
             "scripts": [
+                "scripts/lxc-user.sh"
+            ],
+            "only": ["lxc-xenial"]
+        },
+        {
+            "type": "shell",
+            "execute_command": "echo 'vagrant' | sudo -S -E sh '{{.Path}}'",
+            "scripts": [
+                "scripts/user.sh"
+            ],
+            "only": ["qemu-xenial", "vbox-xenial"]
+        },
+        {
+            "type": "shell",
+            "execute_command": "echo 'vagrant' | sudo -S -E sh '{{.Path}}'",
+            "scripts": [
                 "scripts/network.sh"
             ],
             "only": ["qemu-xenial"]
+        },
+        {
+            "type": "shell",
+            "execute_command": "echo 'vagrant' | sudo -S -E sh '{{.Path}}'",
+            "scripts": [
+                "scripts/sudo.sh",
+                "scripts/ssh_key.sh"
+            ]
         }
+
     ],
     "post-processors": [
         [
